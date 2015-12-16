@@ -1,1 +1,12 @@
-<p>This is the register view.</p>
+	<form ng-submit="submit()" name="register" class="form-signin" novalidate>
+		<h1 class="form-signin-heading text-muted">Register</h1>
+		<input name="email" ng-model="email" type="email" class="form-control" placeholder="Email address" required>
+        <p class="help-block" ng-show="register.email.$dirty && register.email.$invalid">Please enter valid email.</p>
+        <input name="password" type="password" ng-model="password" class="form-control" placeholder="Password" required>
+	   <input name="password_confirm" ng-model="password_confirm" type="password" class="form-control" placeholder="Confirm Password" validate-equals='password'>
+       <p class="help-block" ng-show="register.password_confirm.$dirty && register.password_confirm.$invalid">Please enter equal passwords.</p>
+        <button ng-disabled="register.$invalid" class="btn btn-lg btn-primary btn-block" type="submit">
+			Submit
+		</button>
+	</form>
+

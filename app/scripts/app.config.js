@@ -1,7 +1,16 @@
-angular.module('todosApp').config(function($stateProvider){
+angular.module('todosApp').config(function($urlRouterProvider, $stateProvider){
 
-    $stateProvider.state('register', {
+    $urlRouterProvider.otherwise('/'),
+    $stateProvider
+    
+    .state('main', {
+        url: '/',
+        templateUrl: '/views/main.html'
+    })
+    
+    .state('register', {
         url: '/register',
-        templateUrl: '/views/register.html'
+        templateUrl: '/views/register.html',
+        controller: 'RegisterCtrl'
     });
 });
