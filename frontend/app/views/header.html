@@ -3,8 +3,14 @@
             <li ui-sref-active="active">
                 <a ui-sref="main">Home</a>
             </li>
-            <li ng-if="!isAuthenticated" ui-sref-active="active">
+            <li ui-sref-active="active">
+                <a ui-sref="job">Jobs</a>
+            </li>
+            <li ng-hide="isAuthenticated()" ui-sref-active="active">
                 <a ui-sref="register">Register</a>
+            </li>
+             <li ng-show="isAuthenticated()" ui-sref-active="active">
+                <a ui-sref="logout">Logout</a>
             </li>
         </ul>
         <h3 class="text-muted">Todos</h3>

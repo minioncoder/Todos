@@ -1,7 +1,8 @@
-angular.module('todosApp').config(function($urlRouterProvider, $stateProvider){
+angular.module('todosApp').config(function($urlRouterProvider, $stateProvider, $httpProvider){
 
     $urlRouterProvider.otherwise('/'),
-    $stateProvider
+    
+        $stateProvider
     
     .state('main', {
         url: '/',
@@ -12,5 +13,16 @@ angular.module('todosApp').config(function($urlRouterProvider, $stateProvider){
         url: '/register',
         templateUrl: '/views/register.html',
         controller: 'RegisterCtrl'
+    })
+    .state('job', {
+        url: '/job',
+        templateUrl: '/views/job.html',
+        controller: 'JobsCtrl'
+    })
+     .state('logout', {
+        url: '/logout',
+        controller: 'LogoutCtrl'
     });
-});
+    $httpProvider.interceptors.push('authInterceptor');
+})
+.constant('API_URL', 'http://localhost:3000/');
