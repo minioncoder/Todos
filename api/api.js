@@ -3,10 +3,17 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var User = require('./models/User.js');
 var jwt = require('jwt-simple');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
 
 var app = express();
 
 app.use(bodyParser.json());
+app.use(passport.initialize());
+
+passport.serializeUser(function(user, done){
+    done(null, user.id);
+})
  
 app.use(function(req, res, next){
     res.header('Access-Control-Allow-Origin', '*');
@@ -14,28 +21,77 @@ app.use(function(req, res, next){
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     next();
 });
+var strategyOptions = {
+    usernameField: 'email'
+};
 
-app.post('/register', function(req, res){
-   var user = req.body;
-    var newUser = new User.model({
-        email: user.email,
-        password: user.password
+var loginStrategy = new LocalStrategy(strategyOptions, function(email, password, done){
+    var searchUser = {email: email};
+    User.findOne(searchUser, function(err, user){
+        if(err) return done(err);
+        
+        if(!user) return done(null, false, {
+            message: 'Wrong email/password'
+        });
+        
+        user.comparePasswords(password, function(err, isMatch){
+            if(err) return done(err);
+            
+            if(!isMatch) return done(null, false, {
+                message: 'Wrong email/password'
+            });
+            return done(null, user);
+            
+        });
+    }); 
+});
+
+var registerStrategy = new LocalStrategy(strategyOptions, function(email, password, done){
+      var searchUser = {
+          email: email
+      };
+    
+        User.findOne(searchUser, function(err, user){
+            
+        if(err) return done(err);
+        
+        if(!user) return done(null, false, {
+            message: 'email already exists'
+        });
+        });
+    var newUser = new User({
+        email: email,
+        password: password
     });
     
-    var payload =  {
-        iss: req.hostname,
-        sub: newUser.id
+   
+    newUser.save(function(err){
+        done(null, newUser);
+    });
+})
+
+
+passport.use('local-register', registerStrategy);
+passport.use('local-login', loginStrategy);
+
+app.post('/register', passport.authenticate('local-register'),function(req, res){
+         createSendToken(req.user, res);  
+});
+
+app.post('/login', passport.authenticate('local-login'), function(req, res){
+         createSendToken(req.user, res);
+});
+ 
+function createSendToken(user, res){
+     var payload =  {
+        sub: user.id
     }
     var token = jwt.encode(payload, "shhh..");
-    
-    newUser.save(function(err){
-        res.status(200).send({
-            user: newUser.toJSON(),
+    res.status(200).send({
+            user: user.toJSON(),
             token: token
         });
-    });
-    
-});
+}
 
 var jobs = [
     'Learning JS',

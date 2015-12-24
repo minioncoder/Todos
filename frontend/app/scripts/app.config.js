@@ -14,6 +14,13 @@ angular.module('todosApp').config(function($urlRouterProvider, $stateProvider, $
         templateUrl: '/views/register.html',
         controller: 'RegisterCtrl'
     })
+    
+    .state('login', {
+        url: '/login',
+        templateUrl: '/views/login.html',
+        controller: 'LoginCtrl'
+    })
+    
     .state('job', {
         url: '/job',
         templateUrl: '/views/job.html',
