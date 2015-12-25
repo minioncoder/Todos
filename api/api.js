@@ -68,7 +68,7 @@ var registerStrategy = new LocalStrategy(strategyOptions, function(email, passwo
     newUser.save(function(err){
         done(null, newUser);
     });
-})
+});
 
 
 passport.use('local-register', registerStrategy);
@@ -93,10 +93,11 @@ function createSendToken(user, res){
         });
 }
 
-var jobs = [
-    'Learning JS',
-    'Coding .Net Programs',
-    'Learning Algorithms'
+var tasks = [
+    {text: 'Learning JS', done: false},
+    {text: 'Coding .Net Programs', done: false},
+    {text: 'Learning Algorithms', done: false},
+    {text: 'Coding is simply superb', done: false}
 ];
 
 app.get('/jobs', function(req, res){
@@ -115,8 +116,7 @@ app.get('/jobs', function(req, res){
             message: 'Authentication Failed'
         });
     }
-    
-    res.json(jobs);
+    res.json(tasks);
 });
 mongoose.connect('mongodb://localhost/Todos');
 
