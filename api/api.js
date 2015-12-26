@@ -2,6 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var User = require('./models/User.js');
+var Task = require('./models/Task.js');
 var jwt = require('jwt-simple');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
@@ -13,7 +14,7 @@ app.use(passport.initialize());
 
 passport.serializeUser(function(user, done){
     done(null, user.id);
-})
+});
  
 app.use(function(req, res, next){
     res.header('Access-Control-Allow-Origin', '*');
@@ -21,6 +22,7 @@ app.use(function(req, res, next){
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     next();
 });
+
 var strategyOptions = {
     usernameField: 'email'
 };
@@ -100,7 +102,7 @@ var tasks = [
     {text: 'Coding is simply superb', done: false}
 ];
 
-app.get('/jobs', function(req, res){
+app.get('/jobs', function(req, res, done){
     
     if(!req.headers.authorization){
         return res.status(401).send({
@@ -116,8 +118,49 @@ app.get('/jobs', function(req, res){
             message: 'Authentication Failed'
         });
     }
-    res.json(tasks);
+    Task.find({}, function(err, tasks){
+       if(err) return console.error(err);
+        console.log(tasks);
+        res.json(tasks);
+    });
+    //res.json(tasks);
 });
+
+app.post('/jobs', function(req, res){
+    if(!req.headers.authorization){
+        return res.status(401).send({
+            message: 'You are not authorized'
+        });
+    }
+    console.log("Hi there");
+    var token = req.headers.authorization.split(' ')[1];
+    var payload = jwt.decode(token, "shhh..");
+    
+    if(!payload.sub){
+        res.status(401).send({
+            message: 'Authentication Failed'
+        });
+    }
+    var mynewTask = new Task({
+        text: req.body.text,
+        Completed: false
+    });
+    mynewTask.save(function(err, mynewTask){
+        console.log('Entered function');
+        
+    });
+    res.json(true);
+});
+
+app.delete('/jobs/:id', function(req, res){
+    if(tasks.length <= req.params.id){
+        res.statusCode = 404;
+        return res.send('Error no items left to delete');
+    }
+    tasks.splice(req.params.id, 1);
+    res.json(true);
+})
+
 mongoose.connect('mongodb://localhost/Todos');
 
 var server = app.listen(3000, function(){
