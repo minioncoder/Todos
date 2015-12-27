@@ -152,14 +152,14 @@ app.post('/jobs', function(req, res){
     res.json(true);
 });
 
-app.delete('/jobs/:id', function(req, res){
-    if(tasks.length <= req.params.id){
-        res.statusCode = 404;
-        return res.send('Error no items left to delete');
-    }
-    tasks.splice(req.params.id, 1);
-    res.json(true);
-})
+//app.delete('/jobs/:id', function(req, res){
+//    if(tasks.length <= req.params.id){
+//        res.statusCode = 404;
+//        return res.send('Error no items left to delete');
+//    }
+//    tasks.splice(req.params.id, 1);
+//    res.json(true);
+//})
 
 mongoose.connect('mongodb://localhost/Todos');
 
