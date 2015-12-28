@@ -14,11 +14,15 @@ angular.module('todosApp')
     }
     
     $scope.removeItem = function(index){
-        $scope.tasks.splice(index, 1);
+        var ind = $scope.tasks.splice(index, 1);
+        var url = API_URL + 'jobs/'+ind[0]._id;
+        $http.delete(url).then(function(res){
+            console.log("Deleted task", res);
+        });
     }
     
     $scope.done = function(task){
-        //console.log('task = ', task.text, task.Completed);
+        console.log('task = ', task.text, task.Completed);
         var t = $scope.tasks.indexOf(task);
         $scope.tasks[t].Completed = true;
     }

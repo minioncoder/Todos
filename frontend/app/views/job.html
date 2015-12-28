@@ -2,18 +2,20 @@
     <form role="form">
     <h3>Tasks for a day</h3><br/><br/>
     <div class="form-group">
-    <div class="col-xs-4">    
     
+    <div class="col-xs-4">    
         <div ng-repeat="task in tasks">
-        <div><span ng-class="{strike: task.done}">{{task.text}}</span>
-            <span class="glyphicon glyphicon-ok" style="color: aqua" ng-click="done(task)"></span>
-            <span class="glyphicon glyphicon-remove" style="color: red" data-ng-click="removeItem($index)"></span></div>
+        <div>
+            <span style="color: aqua" ng-click="done(task)">Done</span>
+            <span ng-class="{strike: task.done}">{{task.text}}</span>
+            <span class="glyphicon glyphicon-remove" style="color: red" data-ng-click="removeItem($index)"></span>
+        </div>
         </div>
         <div>
         <input class="form-control" id="inputdefault" type="text" ng-model="task"/><br/>
         <button type="button" class="btn btn-success" ng-click="addtodo()">Add +</button>
         </div>
-        </div>
+    </div>
     </div>
     </form>
 </div>

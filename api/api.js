@@ -102,6 +102,15 @@ var tasks = [
     {text: 'Coding is simply superb', done: false}
 ];
 
+app.param('task_id', function(req, res, next, taskId){
+    req.db.tasks.findById(taskId, function(err, task){
+        if(err) return next(err);
+        if(!task) return next(new Error('Task not found'));
+        req.task = task;
+        return next();
+    });
+});
+
 app.get('/jobs', function(req, res, done){
     
     if(!req.headers.authorization){
@@ -146,20 +155,22 @@ app.post('/jobs', function(req, res){
         Completed: false
     });
     mynewTask.save(function(err, mynewTask){
-        console.log('Entered function');
-        
+        console.log('Entered function');    
     });
     res.json(true);
 });
 
-//app.delete('/jobs/:id', function(req, res){
-//    if(tasks.length <= req.params.id){
-//        res.statusCode = 404;
-//        return res.send('Error no items left to delete');
-//    }
-//    tasks.splice(req.params.id, 1);
-//    res.json(true);
-//})
+app.delete('/jobs/:_id', function(req, res){
+    if(tasks.length <= req.params.id){
+        res.statusCode = 404;
+        return res.send('Error no items left to delete');
+    }
+   // console.log(req.params);
+    Task.remove({_id: req.params._id}, function(err, result){
+        if (err) throw err;
+    });
+    res.json(true);
+});
 
 mongoose.connect('mongodb://localhost/Todos');
 
