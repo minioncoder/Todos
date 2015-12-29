@@ -1,21 +1,63 @@
-<div class="container" ng-submit="addtodo()">
+<!--<div class="container" ng-submit="addtodo()">
     <form role="form">
     <h3>Tasks for a day</h3><br/><br/>
-    <div class="form-group">
-    
+    <div>
     <div class="col-xs-4">    
+        <table class="table active">
+           <thead>
+            <tr>
+        <th>
         <div ng-repeat="task in tasks">
         <div>
-            <span style="color: aqua" ng-click="done(task)">Done</span>
+            <span class="glyphicon glyphicon-ok" style="color: aqua" ng-click="done(task)"></span>
             <span ng-class="{strike: task.done}">{{task.text}}</span>
             <span class="glyphicon glyphicon-remove" style="color: red" data-ng-click="removeItem($index)"></span>
         </div>
         </div>
+        </th>
+            </tr>
+            </thead>
+            <tbody>
+    <tr>
         <div>
-        <input class="form-control" id="inputdefault" type="text" ng-model="task"/><br/>
-        <button type="button" class="btn btn-success" ng-click="addtodo()">Add +</button>
+            <td>
+            <input class="form-control" id="inputdefault" type="text" ng-model="task"/></td>
+    <td><button type="button" class="btn btn-success" ng-click="addtodo()">Add +</button></td>
         </div>
+            </tr>
+            </tbody>
+        </table>
     </div>
     </div>
     </form>
+</div>-->
+
+<div class="container">
+    <h3>Tasks for a day</h3><br/>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Done</th>
+        <th>Activity</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="task in tasks">
+        <td><input style="width: 20px; height: 20px;" type="checkbox" value="" ng-checked="tasktext" ng-click="done(task)"></td>
+        <td ng-class="{strike: task.done}" ng-model="tasktext">{{task.text}}</td>
+        <td> <span class="glyphicon glyphicon-remove" style="color: red" data-ng-click="removeItem($index)"></span></td>
+      </tr>
+        <tr>
+            <td style="color: aqua">All Done</td>
+        <td>
+            <input class="form-control" id="inputdefault" type="text" ng-model="task"/>
+        </td>
+        <td>
+        <button type="button" class="btn btn-success" ng-click="addtodo()">Add +</button>
+        </td>
+        </tr>
+    </tbody>
+  </table>
 </div>
+

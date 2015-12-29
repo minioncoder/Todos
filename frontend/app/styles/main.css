@@ -125,4 +125,6 @@ body {
 .alert-hidden{
     visibility: hidden;
 }
-  
+.table{
+   font-size: 20px;
+}

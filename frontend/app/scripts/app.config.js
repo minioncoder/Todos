@@ -26,6 +26,11 @@ angular.module('todosApp').config(function($urlRouterProvider, $stateProvider, $
         templateUrl: '/views/job.html',
         controller: 'JobsCtrl'
     })
+    .state('completed', {
+        url: '/completed',
+        templateUrl: '/views/completed.html',
+        controller: 'CompletedCtrl'
+    })
      .state('logout', {
         url: '/logout',
         controller: 'LogoutCtrl'
