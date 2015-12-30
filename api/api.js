@@ -141,7 +141,6 @@ app.post('/jobs', function(req, res){
             message: 'You are not authorized'
         });
     }
-    console.log("Hi there");
     var token = req.headers.authorization.split(' ')[1];
     var payload = jwt.decode(token, "shhh..");
     
@@ -165,7 +164,6 @@ app.delete('/jobs/:_id', function(req, res){
         res.statusCode = 404;
         return res.send('Error no items left to delete');
     }
-   // console.log(req.params);
     Task.remove({_id: req.params._id}, function(err, result){
         if (err) throw err;
     });
