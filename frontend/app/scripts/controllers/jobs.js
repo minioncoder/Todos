@@ -9,7 +9,7 @@ angular.module('todosApp')
         $scope.tasks.push(task);
         $scope.task = null;
         $http.post(API_URL + 'jobs', task).then(function(res){
-            console.log(res);
+            //console.log(res);
         });
     }
     
@@ -22,9 +22,16 @@ angular.module('todosApp')
     }
     
     $scope.done = function(task){
-        console.log('task = ', task.text, task.Completed);
         var t = $scope.tasks.indexOf(task);
-        $scope.tasks[t].Completed = true;
+        var t1 = $scope.tasks[t];
+        var data = (t1.Completed = true);
+        var url = API_URL + 'jobs/' + t1._id;
+        $http.put(url, data).then(function(res){
+            data.Completed = true;
+            console.log(task.Completed);
+            //console.log(res);
+        });
+        //console.log('task = ', task.text, task.Completed);
     }
    
     $http.get(API_URL + 'jobs').success(function(tasks){
