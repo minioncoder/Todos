@@ -21,21 +21,21 @@ angular.module('todosApp')
         });
     }
     
-    $scope.done = function(task){
-        var t = $scope.tasks.indexOf(task);
+    $scope.done = function(index){
+        var t = $scope.tasks.indexOf(index);
         var t1 = $scope.tasks[t];
-        var data = (t1.Completed = true);
+        t1.Completed = true;
         var url = API_URL + 'jobs/' + t1._id;
-        $http.put(url, data).then(function(res){
-            data.Completed = true;
-            console.log(task.Completed);
-            //console.log(res);
+        $http.put(url, t1)
+        .success(function(data, status, headers){
+            t1.Completed = true;
+            $scope.ServerResponse = data;
+            console.log(data);
         });
-        //console.log('task = ', task.text, task.Completed);
     }
    
     $http.get(API_URL + 'jobs').success(function(tasks){
-        $scope.tasks = tasks;
+            $scope.tasks = tasks;
     }).error(function(err){
         alert('warning', "Unable to get jobs", err.message);
     });  

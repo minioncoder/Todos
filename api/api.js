@@ -18,7 +18,7 @@ passport.serializeUser(function(user, done){
  
 app.use(function(req, res, next){
     res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-control-Allow-Methods', 'GET, PUT, PATCH, POST, DELETE');
+    res.header('Access-control-Allow-Methods', 'GET, PUT, POST, DELETE');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     next();
 });
@@ -127,12 +127,11 @@ app.get('/jobs', function(req, res, done){
             message: 'Authentication Failed'
         });
     }
-    Task.find({}, function(err, tasks){
+    Task.find({Completed: false}, function(err, tasks){
        if(err) return console.error(err);
         console.log(tasks);
         res.json(tasks);
     });
-    //res.json(tasks);
 });
 
 app.post('/jobs', function(req, res){
@@ -168,6 +167,45 @@ app.delete('/jobs/:_id', function(req, res){
         if (err) throw err;
     });
     res.json(true);
+});
+
+app.put('/jobs/:_id', function(req, res){
+    if(tasks.length <= req.params.id){
+        res.statusCode = 404;
+        return res.send('Error no items to update');
+    }
+    Task.findByIdAndUpdate({_id: req.params._id}, {
+        $set: {
+            Completed: true
+        }
+    }, function(err, result){
+        if(err) throw err;
+        console.log('hi');
+        res.json(true);
+    });
+});
+
+app.get('/completed', function(req, res, done){
+    
+    if(!req.headers.authorization){
+        return res.status(401).send({
+            message: 'You are not authorized'
+        });
+    }
+    
+    var token = req.headers.authorization.split(' ')[1];
+    var payload = jwt.decode(token, "shhh..");
+    
+    if(!payload.sub){
+        res.status(401).send({
+            message: 'Authentication Failed'
+        });
+    }
+    Task.find({Completed: true}, function(err, tasks){
+       if(err) return console.error(err);
+        console.log(tasks);
+        res.json(tasks);
+    });
 });
 
 mongoose.connect('mongodb://localhost/Todos');

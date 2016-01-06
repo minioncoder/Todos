@@ -40,16 +40,17 @@
         <th>Done</th>
         <th>Activity</th>
         <th>Delete</th>
-      </tr>
+        <th></th>
+    </tr>
     </thead>
     <tbody>
       <tr ng-repeat="task in tasks">
         <td><input style="width: 20px; height: 20px;" type="checkbox" value="" ng-model ="checked" ng-init="checked=false" ng-click="done(task)"></td>
              
           <td ng-class="{strike: checked}">{{task.text}}</td>
-        <td ng-if="checked">Task is Done!!</td>
         <td> <span class="glyphicon glyphicon-remove" style="color: red" data-ng-click="removeItem($index)"></span></td>
-      </tr>
+        <td ng-if="checked">Task is Done!!</td>
+        </tr>
         <tr>
             <td style="color: aqua">All Done</td>
         <td>
